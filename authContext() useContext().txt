@@ -1,0 +1,64 @@
+Imports:
+
+JavaScript
+import { createContext, useContext } from "react";
+import { useState } from 'react';
+
+createContext and useContext: These functions are imported from the react library.
+createContext is used to create a React Context, which is a way to share data across components without explicit prop drilling.
+useContext is a React Hook that allows components to consume data from a Context.
+useState: This Hook is imported from react to manage state variables within functional components.
+Creating the AuthContext:
+
+JavaScript
+export const AuthContext = createContext();
+This line defines a React Context named AuthContext. This Context will hold the data you want to share across components.
+
+Creating the useAuth Hook:
+JavaScript
+export const useAuth = () => useContext(AuthContext);
+This line creates a custom Hook called useAuth.
+The useAuth Hook utilizes the useContext Hook from React.
+It essentially provides a convenient way to access the value of the AuthContext within any component that uses it. Components no longer need to import useContext directly and can simply call useAuth.
+Creating the AuthProvider Component:
+
+JavaScript
+export default function AuthProvider({ children }) {
+  // Put state in context
+  const [number, setNumber] = useState(0);
+
+  return (
+    <AuthContext.Provider value={{ number }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+This defines the AuthProvider component, which is exported as the default export.
+The AuthProvider component acts as a wrapper that provides the AuthContext to its child components.
+Inside AuthProvider:
+A state variable named number is created using useState, initialized to 0. This variable will hold the data you want to share.
+The AuthContext.Provider component is used to wrap the children prop. This makes the value of number available to all child components of AuthProvider. The value prop of the Provider specifies the data to be shared, which in this case is an object containing the number state variable.
+How to Use This Code:
+
+Wrap your application's root component with AuthProvider: This ensures that all child components have access to the AuthContext.
+
+Use useAuth in components that need the data: In any component that requires access to the number state variable, import and use the useAuth Hook. This avoids the need to pass the data down through multiple levels of components.
+
+Here's an example of how to use useAuth:
+
+JavaScript
+import React from 'react';
+import { useAuth } from './AuthContext'; // Assuming AuthContext is in a separate file
+
+function MyComponent() {
+  const { number } = useAuth();
+
+  return (
+    <div>
+      The current number is: {number}
+    </div>
+  );
+}
+
+In summary, this code sets up a React Context named AuthContext to share a state variable (number) across components. It provides a custom Hook (useAuth) for convenient access and avoids the need for prop drilling.
